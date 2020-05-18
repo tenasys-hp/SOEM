@@ -10,6 +10,30 @@
 static int64_t sysfrequency;
 static double qpc2usec;
 
+#define  timercmp(a, b, CMP)                                \
+  (((a)->tv_sec == (b)->tv_sec) ?                           \
+   ((a)->tv_usec CMP (b)->tv_usec) :                        \
+   ((a)->tv_sec CMP (b)->tv_sec))
+#define  timeradd(a, b, result)                             \
+  do {                                                      \
+    (result)->tv_sec = (a)->tv_sec + (b)->tv_sec;           \
+    (result)->tv_usec = (a)->tv_usec + (b)->tv_usec;        \
+    if ((result)->tv_usec >= 1000000)                       \
+    {                                                       \
+       ++(result)->tv_sec;                                  \
+       (result)->tv_usec -= 1000000;                        \
+    }                                                       \
+  } while (0)
+#define  timersub(a, b, result)                             \
+  do {                                                      \
+    (result)->tv_sec = (a)->tv_sec - (b)->tv_sec;           \
+    (result)->tv_usec = (a)->tv_usec - (b)->tv_usec;        \
+    if ((result)->tv_usec < 0) {                            \
+      --(result)->tv_sec;                                   \
+      (result)->tv_usec += 1000000;                         \
+    }                                                       \
+  } while (0)
+
 #define USECS_PER_SEC     1000000
 
 int osal_gettimeofday (struct timeval *tv, struct timezone *tz)
@@ -63,6 +87,7 @@ int osal_usleep(uint32 usec)
    return 1;
 }
 
+#ifdef Multicore
 /* Mutex is not needed when running single threaded */
 
 void osal_mtx_lock(osal_mutex_t * mtx)
@@ -86,3 +111,4 @@ osal_mutex_t * osal_mtx_create(void)
         /* return (void*)RtCreateMutex(NULL, FALSE, NULL); */
         return (void *)0;
 }
+#endif

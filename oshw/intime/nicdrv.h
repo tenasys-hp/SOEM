@@ -13,8 +13,16 @@
 
 #define HAVE_REMOTE
 
+#ifndef __INTIME__
+#define __INTIME__
+#endif // !__INTIME__
+
+#ifndef __C99__
+#define __C99__
+#endif // !__C99__
+
 #include <rt.h>
-#include "hpeif2.h"
+#include <hpeif2.h>
 
 /** pointer structure to Tx and Rx stacks */
 typedef struct
@@ -112,5 +120,12 @@ int ecx_outframe(ecx_portt *port, int idx, int sock);
 int ecx_outframe_red(ecx_portt *port, int idx);
 int ecx_waitinframe(ecx_portt *port, int idx, int timeout);
 int ecx_srconfirm(ecx_portt *port, int idx,int timeout);
+
+#ifdef EC_VER1
+
+extern ecx_portt     ecx_port;
+extern ecx_redportt  ecx_redport;
+
+#endif
 
 #endif

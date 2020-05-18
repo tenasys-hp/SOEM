@@ -37,9 +37,9 @@
 #include <traceapi.h>
 #include "hpeif2.h"
 
-#include "ethercattype.h"
-#include "nicdrv.h"
 #include "oshw.h"
+#include "osal.h"
+#include "nicdrv.h"
 
 /** Redundancy modes */
 enum
@@ -66,12 +66,7 @@ const uint16 secMAC[3] = { 0x0404, 0x0404, 0x0404 };
 /** second MAC word is used for identification */
 #define RX_SEC secMAC[1]
 
-#ifdef EC_VER1
 
-ecx_portt      ecx_port;
-ecx_redportt   ecx_redport;
-
-#endif
 
 #define ECAT_PRINT_INFO    printf
 #define ECAT_PRINT_WARN    printf
@@ -414,7 +409,7 @@ int ecx_outframe_red(ecx_portt *port, int idx)
       status = hpeStartTransmitter(port->redport->handle);
       if (status != E_OK)
       {
-         (*stack->rxbufstat)[idx] = EC_BUF_EMPTY;
+         (port->redport->rxbufstat)[idx] = EC_BUF_EMPTY;
       }
    }
 
