@@ -74,7 +74,7 @@ const uint16 secMAC[3] = { 0x0404, 0x0404, 0x0404 };
 
 /* HPE port settings */
 const unsigned long interrupt_mode = NO_INTERRUPT;
-const unsigned long phy_settings   = SPEED_100 | DUPLEX_FULL;
+const unsigned long phy_settings   = SPEED_100 | DUPLEX_FULL | 0;
 
 /** Basic setup to connect NIC to socket.
  * @param[in] ifname      = Name of NIC device, f.e. "eth0"
